@@ -1,0 +1,11 @@
+{
+  "name": "com.jarmallnick.gameeventssystem",
+  "version": "1.0.0",
+  "displayName": "Game Events System",
+  "description": "A system that will help create game events through a user-friendly interface and make it easy to subscribe to these events",
+  "unity": "2022.1",
+  "author": {
+    "name": "Jarmallnick",
+    "email": "irkhabibullin@gmail.com"
+  }
+}
