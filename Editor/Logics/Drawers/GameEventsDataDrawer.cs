@@ -85,11 +85,12 @@ namespace GameEventsSystem.Editor.Logics.Drawers
         private void AddChannel(ReorderableList list)
         {
             var greatestIndex = 0;
-            if (_data.channels.Count > 0)
-                greatestIndex = _data.channels
-                    .Select(ch => Regex.Match(ch.channelName, ChannelPattern))
-                    .Where(m => m.Groups.Count > 1)
-                    .Select(m => int.Parse(m.Groups[1].Value)).Max();
+            var channelsWithDefaultNames = _data.channels
+                .Select(ch => Regex.Match(ch.channelName, ChannelPattern))
+                .Where(m => m.Groups.Count > 1)
+                .Select(m => int.Parse(m.Groups[1].Value)).ToList();
+            if (channelsWithDefaultNames.Count > 0)
+                greatestIndex = channelsWithDefaultNames.Max();
             _data.channels.Add(new GameEventsChannel
             {
                 channelName = $"Channel{greatestIndex + 1}"
