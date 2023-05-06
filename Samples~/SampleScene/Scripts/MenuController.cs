@@ -9,8 +9,8 @@ public class MenuController : BaseSubscriber
     {
         if (GameController.IsGameOver)
             return;
-        
-        Debug.Log($"Pause {Time.timeScale}");
+
         Time.timeScale = Time.timeScale == 0 ? 1 : 0;
+        Debug.Log(Time.timeScale == 0 ? "Paused" : "Unpaused");
     }
 }
