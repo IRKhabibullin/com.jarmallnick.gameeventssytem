@@ -7,5 +7,12 @@
   "author": {
     "name": "Jarmallnick",
     "email": "irkhabibullin@gmail.com"
-  }
+  },
+  "samples": [
+    {
+      "displayName": "SampleScene",
+      "description": "Sample scene showing basic usage of Game Events System",
+      "path": "Samples~/SampleScene"
+    }
+  ]
 }

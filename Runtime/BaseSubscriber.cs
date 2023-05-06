@@ -28,7 +28,29 @@ namespace GameEventsSystem.Runtime
                 .Where(m => m.GetCustomAttributes()
                 .Any(attr => attr.GetType().BaseType == typeof(BaseGameEventAttribute))))
             {
-                var attribute = methodInfo.GetCustomAttribute<BaseGameEventAttribute>();
+                SubscribeCallback(methodInfo);
+            }
+        }
+
+        private void SubscribeCallback(MethodInfo methodInfo)
+        {
+            foreach (var attribute in methodInfo.GetCustomAttributes<BaseGameEventAttribute>())
+            {
+                if (!_callbacks.ContainsKey(attribute))
+                    _callbacks.Add(attribute, new List<Delegate>());
+                
+                var actionType = Expression.GetActionType(methodInfo.GetParameters().Select(p => p.ParameterType).ToArray());
+                var d = Delegate.CreateDelegate(actionType, this, methodInfo);
+                _callbacks[attribute].Add(d);
+
+                attribute.Subscribe(d);
+            }
+        }
+
+        private void SubscribeCallbackAlt(MethodInfo methodInfo)
+        {
+            foreach (var attribute in methodInfo.GetCustomAttributes<BaseGameEventAttribute>())
+            {
                 if (!_callbacks.ContainsKey(attribute))
                     _callbacks.Add(attribute, new List<Delegate>());
 

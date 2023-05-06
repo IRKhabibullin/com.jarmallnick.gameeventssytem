@@ -13,6 +13,8 @@ Add required events, select types of arguments, group events by logical channels
 
 It will generate channel classes with static Action events
 
+If you want to set an argument of type, declared in some package, enable "Include packages" toggle
+
 ### Invoke events
 
 Invoke created event as usually

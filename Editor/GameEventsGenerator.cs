@@ -60,12 +60,15 @@ namespace GameEventsSystem.Editor
             builder.AppendLine("// ----- AUTO GENERATED CODE. DO NOT MODIFY ----- //");
             AddUsingNamespaces(builder, channel);
             builder.AppendLine();
-            builder.AppendLine($"public class {channel.channelName}Channel");
+            builder.AppendLine("namespace GameEvents.Channels");
             builder.AppendLine("{");
+            builder.AppendLine($"\tpublic static class {channel.channelName}Channel");
+            builder.AppendLine("\t{");
 
             AddEventsCode(builder, channel);
             AddEventAttribute(builder, channel);
 
+            builder.AppendLine("\t}");
             builder.AppendLine("}");
         }
 
@@ -108,7 +111,7 @@ namespace GameEventsSystem.Editor
             foreach (var channelEvent in channel.events)
             {
                 var eventType = channelEvent.args.Count > 0 ? $"<{string.Join(", ", channelEvent.args)}>" : "";
-                builder.AppendLine($"\tpublic static Action{eventType} {channelEvent.name};");
+                builder.AppendLine($"\t\tpublic static Action{eventType} {channelEvent.name};");
             }
         }
 
@@ -120,22 +123,22 @@ namespace GameEventsSystem.Editor
                 var eventTypeComment = channelEvent.args.Count > 0 ? $"&lt;{string.Join(", ", channelEvent.args)}>" : "";
                 
                 builder.AppendLine();
-                builder.AppendLine("\t/// <summary>");
-                builder.AppendLine($"\t/// Accepts Action{eventTypeComment} callback");
-                builder.AppendLine("\t/// </summary>");
-                builder.AppendLine("\t[AttributeUsage(AttributeTargets.Method)]");
-                builder.AppendLine($"\tpublic class {channelEvent.name}Attribute : BaseGameEventAttribute");
-                builder.AppendLine("\t{");
-                builder.AppendLine("\t\tpublic override void Subscribe(Delegate callback)");
+                builder.AppendLine("\t\t/// <summary>");
+                builder.AppendLine($"\t\t/// Accepts Action{eventTypeComment} callback");
+                builder.AppendLine("\t\t/// </summary>");
+                builder.AppendLine("\t\t[AttributeUsage(AttributeTargets.Method)]");
+                builder.AppendLine($"\t\tpublic class {channelEvent.name}Attribute : BaseGameEventAttribute");
                 builder.AppendLine("\t\t{");
-                builder.AppendLine($"\t\t\t{channelEvent.name} += (Action{eventType})callback;");
-                builder.AppendLine("\t\t}");
+                builder.AppendLine("\t\t\tpublic override void Subscribe(Delegate callback)");
+                builder.AppendLine("\t\t\t{");
+                builder.AppendLine($"\t\t\t\t{channelEvent.name} += (Action{eventType})callback;");
+                builder.AppendLine("\t\t\t}");
                 builder.AppendLine();
-                builder.AppendLine("\t\tpublic override void Unsubscribe(Delegate callback)");
-                builder.AppendLine("\t\t{");
-                builder.AppendLine($"\t\t\t{channelEvent.name} -= (Action{eventType})callback;");
+                builder.AppendLine("\t\t\tpublic override void Unsubscribe(Delegate callback)");
+                builder.AppendLine("\t\t\t{");
+                builder.AppendLine($"\t\t\t\t{channelEvent.name} -= (Action{eventType})callback;");
+                builder.AppendLine("\t\t\t}");
                 builder.AppendLine("\t\t}");
-                builder.AppendLine("\t}");
             }
         }
 
